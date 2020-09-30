@@ -6,3 +6,35 @@ AS A traveler
 I WANT to see the weather outlook for multiple cities
 SO THAT I can plan a trip accordingly
 
+## Description
+- Use the OpenWeather API to retrieve weather data for cities.
+Use AJAX to hook into the API to retrieve data in JSON format.
+Display the following under current weather conditions:
+
+City
+
+Date
+
+Icon image (
+
+Temperature
+
+Humidity
+
+Wind speed
+
+UV index
+
+- Each day for the 5-Day Forecast should display the following:
+
+Date
+
+Icon image 
+
+Temperature
+
+Humidity
+
+## Link to the webpage
+
+ https://rbozal1.github.io/HW06-Server-Side-APIs-WeatherDashboard/
