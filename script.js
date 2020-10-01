@@ -1,9 +1,8 @@
 var apiKey = "114f1a6d2d63f6142beaad9d16a2364c"
-var city = "raleigh"
+var city = ""
 var currentConditions = "https://api.openweathermap.org/data/2.5/weather?appid="
-var fiveDay =
-  "https://api.openweathermap.org/data/2.5/forecast?114f1a6d2d63f6142beaad9d16a2364cq={city name},{country code}"
-
+// var fiveDay =
+//   "https://api.openweathermap.org/data/2.5/forecast?114f1a6d2d63f6142beaad9d16a2364cq={city name},{country code}"
 var searchedArr = JSON.parse(localStorage.getItem("searchedItems")) || [];
 var currentDate = moment().format("MM/DD/YYYY");
 
@@ -17,24 +16,26 @@ $(document).ready(function() {
   })
 })
 
-if (searchedArr.length > 0) {//sets history array search to correct length.
+
+//sets history array search to correct length.
+if (searchedArr.length > 0) {
     getWeather(searchedArr[searchedArr.length - 1]);
 }
-
-for (var i = 0; i < searchedArr.length; i++) {// makes a row for each element in history array(searchTerms).
+// makes a row for each element in history array(searchArr).
+for (var i = 0; i < searchedArr.length; i++) {
     createRow(searchedArr[i]);
 }
 
 function createRow(text) {
     var listItem = $("<li>").addClass("list-group-item").text(text);
-    $(".searchedItems").append(listItem);
+    $(".list").append(listItem);
 }
 
-$(".searchedItems").on("click", "li", function () {
+$(".list").on("click", "li", function () {
     getWeather($(this).text());
     getWeather($(this).text());
 });
-// userInput is passed into the getWeather function as arguement 'cityName'
+// userInput is passed into the getWeather function as an argument to 'cityName'
 function getWeather(cityName) {
   var apiCall = ""
 
@@ -49,21 +50,22 @@ function getWeather(cityName) {
   $.ajax({
     url: apiCall,
     method: "GET"
+
   }).then(function(response) {
     console.log(response)
     
     var humid = response.main.humidity;
     var wind = response.wind.speed
-    var feelslike = response.main.temp
-
-
-    feelslike = (feelslike - 273.15) * 1.8 + 32
-    feelslike = Math.floor(feelslike)
+    var currentWeather= response.main.temp
+    
+     
+    currentWeather = (currentWeather - 273.15) * 1.8 + 32
+    currentWeather = Math.floor(currentWeather)
     city = response.name
-
+     
     //appending city,currentDate, weather, humidity, wind speed
     $("#today").append("<div>" + "<h3>" +city +"(" + currentDate + ")"+"</h3>" +"</div>")
-    $("#today").append("<div>" + "Temperature: " +feelslike + " °F" + "</div>")
+    $("#today").append("<div>" + "Temperature: " +currentWeather + " °F" + "</div>")
     $("#today").append("<div>" + "Humidity: " + humid + " %" + "</div>")
     $("#today").append("<div>" + "Wind Speed:"  + wind + " MPH" +"</div>")
    
@@ -100,7 +102,7 @@ function getWeather(cityName) {
             });
 
 
-    fiveDay = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`
+   var fiveDay = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`
 
      $.ajax({
       url: fiveDay,
@@ -124,7 +126,7 @@ function getWeather(cityName) {
         temp = Math.floor(temp)
         console.log(currentDate)
         console.log(temp)
-
+         
         if (previousdate === currentDate) {
           averageTemp = averageTemp + temp
           count++
@@ -147,7 +149,6 @@ function getWeather(cityName) {
         card.append(temp)
 
         $("#forecast").append(card);
-        // $("#today").append("<div>" + humidity+ "</div>")
           count = 0
           averageTemp = 0
           previousdate = currentDate
