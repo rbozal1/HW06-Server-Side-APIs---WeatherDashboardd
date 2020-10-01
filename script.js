@@ -3,10 +3,9 @@ var city = "raleigh"
 var currentConditions = "https://api.openweathermap.org/data/2.5/weather?appid="
 var fiveDay =
   "https://api.openweathermap.org/data/2.5/forecast?114f1a6d2d63f6142beaad9d16a2364cq={city name},{country code}"
-var uvIndex =
-  "https://api.openweathermap.org/data/2.5/uvi?appid={appid}&lat={lat}&lon={lon}"
-var searchedArr = JSON.parse(localStorage.getItem("searchedItems")) || [];
 
+var searchedArr = JSON.parse(localStorage.getItem("searchedItems")) || [];
+var currentDate = moment().format("MM/DD/YYYY");
 
 //taking in user input, and passing the value into a variable
 $(document).ready(function() {
@@ -28,25 +27,16 @@ for (var i = 0; i < searchedArr.length; i++) {// makes a row for each element in
 
 function createRow(text) {
     var listItem = $("<li>").addClass("list-group-item").text(text);
-    $("searchedItems").append(listItem);
+    $(".searchedItems").append(listItem);
 }
 
-$("searchedItems").on("click", "li", function () {
+$(".searchedItems").on("click", "li", function () {
     getWeather($(this).text());
     getWeather($(this).text());
 });
 // userInput is passed into the getWeather function as arguement 'cityName'
 function getWeather(cityName) {
   var apiCall = ""
-//   var title = $("<h3>").addClass("card-title").text(data.name + " (" + new Date().toLocaleDateString() + ")");
-//             var img = $("<img>").attr("src", "https://openweathermap.org/img/w/" + data.weather[0].icon + ".png");
-
-
-//             var card = $("<div>").addClass("card");
-//             var cardBody = $("<div>").addClass("card-body");
-//             var wind = $("<p>").addClass("card-text").text("Wind Speed: " + data.wind.speed + " MPH");
-//             var humid = $("<p>").addClass("card-text").text("Humidity: " + data.main.humidity + "%");
-//             var temp = $("<p>").addClass("card-text").text("Temperature: " + data.main.temp + " °F");
 
   if (cityName !== "") {
     apiCall = currentConditions + apiKey + "&q=" + cityName
@@ -62,7 +52,7 @@ function getWeather(cityName) {
   }).then(function(response) {
     console.log(response)
     
-
+    var humid = response.main.humidity;
     var wind = response.wind.speed
     var feelslike = response.main.temp
 
@@ -71,11 +61,44 @@ function getWeather(cityName) {
     feelslike = Math.floor(feelslike)
     city = response.name
 
-
-    $("#today").append("<div>" + "<h4>" +city + "</h4>"+currentDate +"</div>")
+    //appending city,currentDate, weather, humidity, wind speed
+    $("#today").append("<div>" + "<h3>" +city +"(" + currentDate + ")"+"</h3>" +"</div>")
     $("#today").append("<div>" + "Temperature: " +feelslike + " °F" + "</div>")
+    $("#today").append("<div>" + "Humidity: " + humid + " %" + "</div>")
     $("#today").append("<div>" + "Wind Speed:"  + wind + " MPH" +"</div>")
+   
     
+    //displaying Uv index
+    var lon = response.coord.lon;
+    var lat = response.coord.lat;
+    var uvIndex = $("<p>").addClass("card-text").text("UV Index: ")
+
+            $.ajax({
+                type: "GET",
+                url:`https://api.openweathermap.org/data/2.5/uvi?appid=${apiKey}&lat=${lat}&lon=${lon}` 
+
+
+            }).then(function (response) {
+                console.log(response);
+
+                // var uvColor;
+                var uvResponse = response.value;
+                var btn = $("<span>").addClass("btn btn-sm").text(uvResponse);
+
+
+                if (uvResponse < 3) {
+                    btn.addClass("btn-success");
+                } else if (uvResponse < 7) {
+                    btn.addClass("btn-warning");
+                } else {
+                    btn.addClass("btn-danger");
+                }
+
+                
+                $("#today").append(uvIndex.append(btn));
+
+            });
+
 
     fiveDay = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`
 
