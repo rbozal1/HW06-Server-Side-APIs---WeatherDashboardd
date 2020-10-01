@@ -1,8 +1,6 @@
 var apiKey = "114f1a6d2d63f6142beaad9d16a2364c"
 var city = ""
 var currentConditions = "https://api.openweathermap.org/data/2.5/weather?appid="
-// var fiveDay =
-//   "https://api.openweathermap.org/data/2.5/forecast?114f1a6d2d63f6142beaad9d16a2364cq={city name},{country code}"
 var searchedArr = JSON.parse(localStorage.getItem("searchedItems")) || [];
 var currentDate = moment().format("MM/DD/YYYY");
 
