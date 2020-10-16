@@ -36,3 +36,5 @@ Each day for the 5-Day Forecast should display the following:
 ## Link to the webpage
 
  https://rbozal1.github.io/HW06-Server-Side-APIs-WeatherDashboard/
+ 
+ ![image](https://user-images.githubusercontent.com/49447293/96201332-4c6a2580-0f2a-11eb-81e4-bcf851be4fc5.png)
